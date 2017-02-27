@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import axios from 'axios'
-
+import ResponseMsg from './ResponseMsg.jsx'
 
 const NewPostMainDiv = styled.div`
     display: flex;
@@ -21,8 +21,8 @@ class CreatePost extends React.Component {
         this.state = { title: '', text: '', postedMsg: '' }
     }
 
-    setPostedMsg = (status,...errMsg) => status == true ? this.setState({title:'', text:'', postedMsg: <span style={{color:'green'}}>Posted !!</span>}) 
-        : this.setState({title:'', text:'', postedMsg: <span style={{color:'red'}}>{errMsg}</span>})
+    setPostedMsg = (status,...errMsg) => status == true ? this.setState({title:'', text:'', postedMsg: <ResponseMsg value={true} text='Posted!'/>}) 
+        : this.setState({title:'', text:'', postedMsg: <ResponseMsg value={false} text={errMsg}/>})
 
     onChange = name => value => this.setState({ [name]: value })
     _handler = {
@@ -38,14 +38,14 @@ class CreatePost extends React.Component {
         },
         data: {
             title: this.state.title,
-            text: this.state.text
+            text: this.state.text,
+            comments: []
         }
     }).then(function(response){
         response.data == 'success' ? this.setPostedMsg(true) : this.setPostedMsg(false,response.data)
     }.bind(this)).catch(function(err){
         console.log(err)
     })
-
 
     render() {
         return (
@@ -57,10 +57,7 @@ class CreatePost extends React.Component {
             </NewPostMainDiv>
 
         );
-
-
     }
-
 
 }
 export default CreatePost;

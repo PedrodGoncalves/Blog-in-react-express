@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
+import ResponseMsg from './ResponseMsg.jsx'
 
 const MainDiv = styled.div`
     display:flex;
@@ -24,11 +25,12 @@ const FlexButtonDiv = styled.div`
     width:100%;
 `
 const SubmitButton = styled.button`
+    cursor:pointer;
     border: solid rgb(244, 83, 66);
     align:center;
     border-radius:3px;
     color:white;
-    transition:0.7s;
+    transition:0.3s;
     background-color:rgb(244, 83, 66);
     width:12.5%;
     height:100%;
@@ -46,16 +48,16 @@ class Login extends React.Component {
         this.state = { username: '', password: '', responseMsg: '' }
     }
 
-    setResponseMsg = status => status == true ? this.setState({responseMsg:<span style={{ color: 'green' }}>Logged in with Success!</span>}) 
-        : this.setState({responseMsg: <span style={{ color: 'red' }}>wrong details</span>})
+    setResponseMsg = status => status == true ? this.setState({username:'',password:'',responseMsg: <ResponseMsg value={true} text='Logged in!'/>}) 
+        : this.setState({username:'',password:'',responseMsg: <ResponseMsg value={false} text='Wrong Details.'/>})
 
 
     render() {
         return (
             <MainDiv>
                 <FlexInputDiv>
-                    <span>Username <input type='text' onChange={event => this.setState({ username: event.target.value })} /></span>
-                    <span style={{ marginTop: '2%' }}>Password  <input type='text' onChange={event => this.setState({ password: event.target.value })} /></span>
+                    <span>Username <input type='text' value={this.state.username} onChange={event => this.setState({ username: event.target.value })} /></span>
+                    <span style={{ marginTop: '2%' }}>Password  <input type='text' value={this.state.password} onChange={event => this.setState({ password: event.target.value })} /></span>
                 </FlexInputDiv>
                 <FlexButtonDiv>
                     <SubmitButton onClick={() => axios.post('/login', {

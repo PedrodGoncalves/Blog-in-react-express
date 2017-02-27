@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components'
+import CommentBox from './CommentBox.jsx'
 
 const BlogPostDiv = styled.div`
     border-bottom:solid 0.5px rgba(65, 136, 244, .5);
     align-self:flex-center;
     width:50%;
-    padding-bottom:5%;
-    
+    padding-bottom:2%;
 `
 
 const Title = styled.h1`
@@ -35,6 +35,7 @@ class BlogPost extends React.Component {
             <BlogPostDiv>
                 <Title>{this.props.title}</Title>
                 <Text>{this.props.text}</Text>
+                <CommentBox comments={this.props.comments.reverse()} title={this.props.title}/>
             </BlogPostDiv>
 
         );

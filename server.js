@@ -36,8 +36,8 @@ class Token {
   }
   setToken = value => this.token = value
   getToken = () => this.token
-
 }
+
 var token = new Token()
 
 app.post('/login',
@@ -60,12 +60,32 @@ app.post('/newPost',verifyToken,emptyPost,function(req,res){
     res.send('success')
 })
 
+
+app.post('/newComment', function(req,res){
+      var newComment = {
+        name: req.body.name,
+        text: req.body.text
+      }
+      var blogPostTitle = req.body.title
+      fs.readFile('./blogposts',function(err,fres){
+         var posts = JSON.parse(fres)
+         posts.map(post => post.title == blogPostTitle ? post.comments.push(newComment) : post)
+         fs.writeFile('./blogposts',JSON.stringify(posts))
+         res.send('Posted')
+    })   
+
+})
 app.get('/getBlogPosts',function(req,res){
     var posts;
     fs.readFile('./blogposts',function(err,fres){
-        posts = JSON.parse(fres).slice(0,req.query.number)
+        try{
+          posts = JSON.parse(fres).slice(0,req.query.number)
+        }catch(err){
+          posts = [{title:'Welcome',text: 'to my humble blog!', comments: []}]
+          fs.writeFile('./blogposts',JSON.stringify(posts))
+        }
         res.send(posts)
-    }.bind(this))
+    })
 })
 
 app.get('/',function(req,res){
