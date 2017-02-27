@@ -14,6 +14,16 @@ const uuidV1 = require('uuid/v1');
 app.use(express.static('static'))
 app.use(bodyParser.json())
 app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+ 
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
